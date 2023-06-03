@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
+import { getTimestamp } from "../utils/date";
 
-export function getTimestamp(date) {
-  return new Date(date).getTime();
-}
 const dummyExpenses = [
   {
     id: "e1",

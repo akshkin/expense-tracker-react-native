@@ -1,17 +1,21 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import ExpensesList from "./ExpensesList";
 import ExpensesSummary from "./ExpensesSummary";
 import { GlobalStyles } from "../constants/styles";
-import { useSelector } from "react-redux";
-import { selectExpense } from "../features/expenseSlice";
 
 function ExpensesOutput({ expenses, period }) {
   return (
-    <View style={styles.container}>
-      <ExpensesSummary expenses={expenses} period={period} />
-      <ExpensesList expenses={expenses} />
-    </View>
+    <>
+      {expenses.length > 0 ? (
+        <View style={styles.container}>
+          <ExpensesSummary expenses={expenses} period={period} />
+          <ExpensesList expenses={expenses} />
+        </View>
+      ) : (
+        <Text style={styles.text}>No expenses</Text>
+      )}
+    </>
   );
 }
 
@@ -22,5 +26,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     backgroundColor: GlobalStyles.colors.primar700,
+  },
+  text: {
+    textAlign: "center",
+    marginTop: 12,
+    fontSize: 18,
   },
 });

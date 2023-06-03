@@ -2,19 +2,29 @@ import React, { useLayoutEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import IconButton from "../components/ui/IconButton";
 import { GlobalStyles } from "../constants/styles";
-import Button from "../components/ui/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addExpense,
   deleteExpense,
-  getTimestamp,
+  selectExpense,
   updateExpense,
 } from "../features/expenseSlice";
+import ExpenseForm from "../components/ExpenseForm";
+import { getFormattedDate } from "../utils/date";
 
 function ManageExpenses({ route, navigation }) {
+  const expenses = useSelector(selectExpense);
   const dispatch = useDispatch();
+
   const expenseId = route.params?.expenseId;
   const isEditing = !!expenseId; //to turn a value into a boolean --> falsy value to false and truthy value to true
+
+  const selectedExpense = expenses.find((expense) => expense.id === expenseId);
+  const formattedSelectedExpense = selectedExpense && {
+    ...selectedExpense,
+    amount: selectedExpense?.amount.toString(),
+    date: getFormattedDate(selectedExpense?.date),
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -31,32 +41,23 @@ function ManageExpenses({ route, navigation }) {
     navigation.goBack();
   }
 
-  function handleConfirm() {
-    console.log("yo");
-    const newExpense = {
-      title: "milk",
-      amount: 12,
-      date: getTimestamp(new Date("2023-05-31")),
-    };
+  function handleConfirm(expenseData) {
     if (isEditing) {
-      dispatch(updateExpense({ id: expenseId, ...newExpense }));
+      dispatch(updateExpense({ id: expenseId, ...expenseData }));
     } else {
-      dispatch(addExpense(newExpense));
+      dispatch(addExpense(expenseData));
     }
     navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
-      <Text>{expenseId}</Text>
-      <View style={styles.buttonsContainer}>
-        <Button style={styles.button} onPress={cancel}>
-          Cancel
-        </Button>
-        <Button style={styles.button} onPress={handleConfirm}>
-          {isEditing ? "Update" : "Add"}
-        </Button>
-      </View>
+      <ExpenseForm
+        cancel={cancel}
+        handleConfirm={handleConfirm}
+        isEditing={isEditing}
+        selectedExpense={formattedSelectedExpense}
+      />
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton

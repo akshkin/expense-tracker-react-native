@@ -1,8 +1,12 @@
 import React from "react";
-import { Text } from "react-native";
+import ExpensesOutput from "../components/ExpensesOutput";
+import { useSelector } from "react-redux";
+import { selectExpense } from "../features/expenseSlice";
 
 function AllExpenses() {
-  return <Text>AllExpenses</Text>;
+  const expenses = useSelector(selectExpense);
+  // console.log(expenses);
+  return <ExpensesOutput expenses={expenses} period="Total" />;
 }
 
 export default AllExpenses;

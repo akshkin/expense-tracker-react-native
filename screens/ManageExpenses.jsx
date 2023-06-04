@@ -6,15 +6,24 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addExpense,
   deleteExpense,
+  errorState,
+  fetchExpenses,
+  loadingState,
   selectExpense,
   updateExpense,
 } from "../features/expenseSlice";
 import ExpenseForm from "../components/ExpenseForm";
 import { getFormattedDate } from "../utils/date";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
+import ErrorText from "../components/ErrorText";
+import { useEffect } from "react";
+import { useState } from "react";
 
 function ManageExpenses({ route, navigation }) {
   const expenses = useSelector(selectExpense);
+  const isLoading = useSelector(loadingState);
   const dispatch = useDispatch();
+  const error = useSelector(errorState);
 
   const expenseId = route.params?.expenseId;
   const isEditing = !!expenseId; //to turn a value into a boolean --> falsy value to false and truthy value to true
@@ -22,7 +31,7 @@ function ManageExpenses({ route, navigation }) {
   const selectedExpense = expenses.find((expense) => expense.id === expenseId);
   const formattedSelectedExpense = selectedExpense && {
     ...selectedExpense,
-    amount: selectedExpense?.amount.toString(),
+    amount: selectedExpense?.amount?.toString(),
     date: getFormattedDate(selectedExpense?.date),
   };
 
@@ -35,6 +44,7 @@ function ManageExpenses({ route, navigation }) {
   function deleteItem() {
     dispatch(deleteExpense(expenseId));
     navigation.goBack();
+    dispatch(fetchExpenses());
   }
 
   function cancel() {
@@ -43,32 +53,40 @@ function ManageExpenses({ route, navigation }) {
 
   function handleConfirm(expenseData) {
     if (isEditing) {
-      dispatch(updateExpense({ id: expenseId, ...expenseData }));
+      dispatch(updateExpense(expenseId, expenseData));
     } else {
       dispatch(addExpense(expenseData));
     }
     navigation.goBack();
+    dispatch(fetchExpenses());
   }
 
   return (
-    <View style={styles.container}>
-      <ExpenseForm
-        cancel={cancel}
-        handleConfirm={handleConfirm}
-        isEditing={isEditing}
-        selectedExpense={formattedSelectedExpense}
-      />
-      {isEditing && (
-        <View style={styles.deleteContainer}>
-          <IconButton
-            icon="trash"
-            color={GlobalStyles.colors.error500}
-            size={36}
-            onPress={deleteItem}
+    <>
+      {isLoading ? (
+        <LoadingOverlay />
+      ) : (
+        <View style={styles.container}>
+          {error && <ErrorText errorText={error} />}
+          <ExpenseForm
+            cancel={cancel}
+            handleConfirm={handleConfirm}
+            isEditing={isEditing}
+            selectedExpense={formattedSelectedExpense}
           />
+          {isEditing && (
+            <View style={styles.deleteContainer}>
+              <IconButton
+                icon="trash"
+                color={GlobalStyles.colors.error500}
+                size={36}
+                onPress={deleteItem}
+              />
+            </View>
+          )}
         </View>
       )}
-    </View>
+    </>
   );
 }
 

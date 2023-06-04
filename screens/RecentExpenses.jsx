@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 import ExpensesOutput from "../components/ExpensesOutput";
-import { useSelector } from "react-redux";
-import { selectExpense } from "../features/expenseSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  errorState,
+  fetchExpenses,
+  loadingState,
+  selectExpense,
+} from "../features/expenseSlice";
 import { getDateMinusDays } from "../utils/date";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
+import ErrorText from "../components/ErrorText";
+import ErrorOverlay from "../components/ui/ErrorOverlay";
 
 function RecentExpenses({ navigation }) {
   const expenses = useSelector(selectExpense);
-  // console.log(expenses);
+  const isLoading = useSelector(loadingState);
+  const error = useSelector(errorState);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchExpenses());
+  }, []);
 
   const recentExpenses = expenses.filter((expense) => {
     const today = new Date();
@@ -16,7 +30,17 @@ function RecentExpenses({ navigation }) {
     return expense.date > date7daysAgo;
   });
 
-  return <ExpensesOutput expenses={recentExpenses} period="Last 7 days" />;
+  if (error && !isLoading) return <ErrorOverlay error={error} />;
+
+  return (
+    <>
+      {isLoading ? (
+        <LoadingOverlay />
+      ) : (
+        <ExpensesOutput expenses={recentExpenses} period="Last 7 days" />
+      )}
+    </>
+  );
 }
 
 export default RecentExpenses;

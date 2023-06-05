@@ -10,7 +10,6 @@ import {
 } from "../features/expenseSlice";
 import { getDateMinusDays } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
-import ErrorText from "../components/ErrorText";
 import ErrorOverlay from "../components/ui/ErrorOverlay";
 
 function RecentExpenses({ navigation }) {

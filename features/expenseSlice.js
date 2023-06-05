@@ -23,11 +23,13 @@ export const addExpense = createAsyncThunk(
     }
   }
 );
+
 export const updateExpense = createAsyncThunk(
   "expense/update",
-  async (id, expenseData) => {
+  async ({ expenseId, expenseData }) => {
     try {
-      await updateExpenses(id, expenseData);
+      const data = await updateExpenses(expenseId, expenseData);
+      return data;
     } catch (error) {
       console.log(error);
       return Promise.reject(error);
@@ -65,7 +67,11 @@ export const fetchExpenses = createAsyncThunk("expense/fetch", async () => {
 const expenseSlice = createSlice({
   name: "expenses",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    addExpenseItem(state, action) {
+      state.expenses = [action.payload, ...state.expenses];
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(addExpense.pending, (state, action) => {
@@ -83,6 +89,9 @@ const expenseSlice = createSlice({
       })
       .addCase(updateExpense.fulfilled, (state, action) => {
         state.loading = false;
+        state.expenses = state.expenses.map((expense) =>
+          expense.id === action.payload.id ? action.payload : expense
+        );
       })
       .addCase(updateExpense.rejected, (state, action) => {
         state.loading = false;
@@ -112,6 +121,7 @@ const expenseSlice = createSlice({
   },
 });
 
+export const addExpenseItem = expenseSlice.actions.addExpenseItem;
 export const selectExpense = (state) => state.expenses.expenses;
 export const loadingState = (state) => state.expenses.loading;
 export const errorState = (state) => state.expenses.error;

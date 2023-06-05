@@ -13,7 +13,8 @@ export async function getExpenses() {
 }
 
 export async function updateExpenses(id, expenseData) {
-  await axios.patch(`${URL}/expenses/${id}.json`, expenseData);
+  const response = await axios.patch(`${URL}/expenses/${id}.json`, expenseData);
+  return response.data;
 }
 export async function deleteExpenses(id) {
   await axios.delete(`${URL}/expenses/${id}.json`);

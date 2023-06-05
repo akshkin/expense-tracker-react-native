@@ -39,6 +39,7 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
       return;
     }
 
+    console.log(expenseData);
     handleConfirm(expenseData);
   }
 

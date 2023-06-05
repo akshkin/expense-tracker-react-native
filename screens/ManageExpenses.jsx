@@ -5,6 +5,7 @@ import { GlobalStyles } from "../constants/styles";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addExpense,
+  addExpenseItem,
   deleteExpense,
   errorState,
   fetchExpenses,
@@ -16,8 +17,7 @@ import ExpenseForm from "../components/ExpenseForm";
 import { getFormattedDate } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorText from "../components/ErrorText";
-import { useEffect } from "react";
-import { useState } from "react";
+import { updateExpenses } from "../utils/http";
 
 function ManageExpenses({ route, navigation }) {
   const expenses = useSelector(selectExpense);
@@ -51,11 +51,12 @@ function ManageExpenses({ route, navigation }) {
     navigation.goBack();
   }
 
-  function handleConfirm(expenseData) {
+  async function handleConfirm(expenseData) {
     if (isEditing) {
-      dispatch(updateExpense(expenseId, expenseData));
+      dispatch(updateExpense({ expenseId, expenseData }));
     } else {
       dispatch(addExpense(expenseData));
+      addExpenseItem(expenseData);
     }
     navigation.goBack();
     dispatch(fetchExpenses());

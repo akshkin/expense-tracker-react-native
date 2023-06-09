@@ -3,25 +3,27 @@ import { Text, View, StyleSheet, Alert } from "react-native";
 import Input from "./Input";
 import { useState } from "react";
 import Button from "./ui/Button";
-import { getTimestamp } from "../utils/date";
+import { getFormattedDate, getTimestamp } from "../utils/date";
+import DatePickerAndroid from "@react-native-community/datetimepicker";
 
 function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
   const [formData, setFormData] = useState(
     selectedExpense
       ? { ...selectedExpense }
-      : { title: "", amount: "", date: "" }
+      : { title: "", amount: "", date: getTimestamp(new Date()) }
   );
+  const [open, setOpen] = useState(false);
 
   const { title, amount, date } = formData;
+  console.log(getFormattedDate(date));
 
   const expenseData = {
     title: title,
     amount: parseInt(amount),
-    date: getTimestamp(date),
+    date: date,
   };
   const isAmountValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
-  const isDateValid =
-    date.length === 10 && new Date(date).toString() !== "Invalid Date";
+  const isDateValid = new Date(date) !== "Invalid Date";
   const isTitleValid = expenseData.title.trim().length > 0;
 
   function handleChange(name, enteredValue) {
@@ -68,18 +70,20 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
           onChangeText: (value) => handleChange("amount", value),
         }}
       />
-      <Input
-        label="Date"
-        invalid={!isDateValid}
-        errorText="Date must be entered in the form YYYY-MM-DD"
-        textInput={{
-          placeholder: "YYYY-MM-DD",
-          maxLength: 10,
-          keyboardType: "decimal-pad",
-          value: date,
-          onChangeText: (value) => handleChange("date", value),
-        }}
-      />
+      <Button onPress={() => setOpen(true)}>Pick date</Button>
+      {open && (
+        <DatePickerAndroid
+          value={new Date(date)}
+          mode="date"
+          display="default"
+          onChange={(value) => {
+            console.log(date);
+            handleChange("date", value.nativeEvent.timestamp);
+            setOpen(false);
+            console.log(date);
+          }}
+        />
+      )}
       <View style={styles.buttonsContainer}>
         <Button style={styles.button} onPress={cancel}>
           Cancel

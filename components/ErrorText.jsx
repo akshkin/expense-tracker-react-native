@@ -35,6 +35,5 @@ const styles = StyleSheet.create({
   errorText: {
     color: GlobalStyles.colors.error500,
     fontWeight: "bold",
-    // marginHorizontal: 8,
   },
 });

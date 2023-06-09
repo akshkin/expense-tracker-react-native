@@ -9,6 +9,9 @@ import {
 } from "../features/expenseSlice";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorOverlay from "../components/ui/ErrorOverlay";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, View } from "react-native";
+import Wrapper from "../components/Wrapper";
 
 function AllExpenses() {
   const dispatch = useDispatch();
@@ -27,10 +30,18 @@ function AllExpenses() {
       {isLoading ? (
         <LoadingOverlay />
       ) : (
-        <ExpensesOutput expenses={expenses} period="Total" />
+        <Wrapper>
+          <ExpensesOutput expenses={expenses} period="Total" />
+        </Wrapper>
       )}
     </>
   );
 }
 
 export default AllExpenses;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: GlobalStyles.colors.primar700,
+    // backgroundColor: GlobalStyles.colors.primar700,
   },
   text: {
     textAlign: "center",

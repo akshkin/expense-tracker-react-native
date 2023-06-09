@@ -11,6 +11,7 @@ import {
 import { getDateMinusDays } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorOverlay from "../components/ui/ErrorOverlay";
+import Wrapper from "../components/Wrapper";
 
 function RecentExpenses({ navigation }) {
   const expenses = useSelector(selectExpense);
@@ -36,7 +37,9 @@ function RecentExpenses({ navigation }) {
       {isLoading ? (
         <LoadingOverlay />
       ) : (
-        <ExpensesOutput expenses={recentExpenses} period="Last 7 days" />
+        <Wrapper>
+          <ExpensesOutput expenses={recentExpenses} period="Last 7 days" />
+        </Wrapper>
       )}
     </>
   );

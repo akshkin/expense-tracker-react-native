@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 8,
     borderRadius: 6,
-    backgroundColor: GlobalStyles.colors.primary500,
+    backgroundColor: GlobalStyles.colors.primary400,
     elevation: 3,
     shadowColor: GlobalStyles.colors.gray500,
     shadowRadius: 4,
@@ -53,15 +53,9 @@ const styles = StyleSheet.create({
   expenseItem: {
     padding: 12,
     borderRadius: 6,
-    backgroundColor: GlobalStyles.colors.primary500,
+    backgroundColor: GlobalStyles.colors.primary400,
     flexDirection: "row",
     justifyContent: "space-between",
-    // elevation: 3,
-    // shadowColor: GlobalStyles.colors.gray500,
-    // shadowRadius: 4,
-    // shadowOffset: { width: 0, height: 1 },
-    // shadowOpacity: 0.4,
-    // overflow: Platform.OS === "android" ? "hidden" : "visible",
   },
   pressed: {
     opacity: 0.5,

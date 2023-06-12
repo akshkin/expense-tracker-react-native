@@ -17,7 +17,6 @@ import ExpenseForm from "../components/ExpenseForm";
 import { getFormattedDate } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorText from "../components/ErrorText";
-import { updateExpenses } from "../utils/http";
 
 function ManageExpenses({ route, navigation }) {
   const expenses = useSelector(selectExpense);

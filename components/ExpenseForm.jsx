@@ -41,7 +41,6 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
       return;
     }
 
-    console.log(expenseData);
     handleConfirm(expenseData);
   }
 
@@ -77,10 +76,8 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
           mode="date"
           display="default"
           onChange={(value) => {
-            console.log(date);
             handleChange("date", value.nativeEvent.timestamp);
             setOpen(false);
-            console.log(date);
           }}
         />
       )}

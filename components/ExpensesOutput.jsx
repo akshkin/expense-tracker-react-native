@@ -2,14 +2,13 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import ExpensesList from "./ExpensesList";
 import ExpensesSummary from "./ExpensesSummary";
-import { GlobalStyles } from "../constants/styles";
 
 function ExpensesOutput({ expenses, period }) {
   if (!expenses?.length) return <Text>No expenses added in {period}</Text>;
 
   return (
     <>
-      {expenses?.length > 0 ? (
+      {expenses && expenses?.length > 0 ? (
         <View style={styles.container}>
           <ExpensesSummary expenses={expenses} period={period} />
           <ExpensesList expenses={expenses} />

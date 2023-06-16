@@ -48,8 +48,6 @@ function ManageExpenses({ route, navigation }) {
 
   async function cancel() {
     navigation.goBack();
-    await AsyncStorage.clear();
-    dispatch(getExpensesFromStorage());
   }
 
   async function handleConfirm(expenseData) {
@@ -81,7 +79,7 @@ function ManageExpenses({ route, navigation }) {
             <View style={styles.deleteContainer}>
               <IconButton
                 icon="trash"
-                color={GlobalStyles.colors.error500}
+                color={GlobalStyles.colors.error50}
                 size={36}
                 onPress={deleteItem}
               />
@@ -105,9 +103,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 8,
     borderTopWidth: 2,
-    borderTopColor: GlobalStyles.colors.primary200,
+    borderTopColor: GlobalStyles.colors.primary100,
     alignItems: "center",
-    backgroundColor: "white",
+    // backgroundColor: "white",
   },
   buttonsContainer: {
     flexDirection: "row",

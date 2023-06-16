@@ -5,10 +5,9 @@ import { GlobalStyles } from "../constants/styles";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addExpense,
-  addExpenseItem,
   deleteExpense,
   errorState,
-  fetchExpenses,
+  getExpensesFromStorage,
   loadingState,
   selectExpense,
   updateExpense,
@@ -17,6 +16,7 @@ import ExpenseForm from "../components/ExpenseForm";
 import { getFormattedDate } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorText from "../components/ErrorText";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function ManageExpenses({ route, navigation }) {
   const expenses = useSelector(selectExpense);
@@ -27,7 +27,7 @@ function ManageExpenses({ route, navigation }) {
   const expenseId = route.params?.expenseId;
   const isEditing = !!expenseId; //to turn a value into a boolean --> falsy value to false and truthy value to true
 
-  const selectedExpense = expenses.find((expense) => expense.id === expenseId);
+  const selectedExpense = expenses?.find((expense) => expense.id === expenseId);
   const formattedSelectedExpense = selectedExpense && {
     ...selectedExpense,
     amount: selectedExpense?.amount?.toString(),
@@ -41,24 +41,27 @@ function ManageExpenses({ route, navigation }) {
   }, [expenseId, navigation]);
 
   function deleteItem() {
-    dispatch(deleteExpense(expenseId));
+    dispatch(deleteExpense({ expenseId, expenses }));
     navigation.goBack();
-    dispatch(fetchExpenses());
+    dispatch(getExpensesFromStorage());
   }
 
-  function cancel() {
+  async function cancel() {
     navigation.goBack();
+    await AsyncStorage.clear();
+    dispatch(getExpensesFromStorage());
   }
 
   async function handleConfirm(expenseData) {
     if (isEditing) {
-      dispatch(updateExpense({ expenseId, expenseData }));
+      dispatch(updateExpense({ expenseId, expenseData, expenses }));
     } else {
-      dispatch(addExpense(expenseData));
-      addExpenseItem(expenseData);
+      console.log("adding");
+      dispatch(addExpense({ expenseData, expenses }));
     }
     navigation.goBack();
-    dispatch(fetchExpenses());
+
+    dispatch(getExpensesFromStorage());
   }
 
   return (

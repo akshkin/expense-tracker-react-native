@@ -5,22 +5,23 @@ import { useState } from "react";
 import Button from "./ui/Button";
 import { getFormattedDate, getTimestamp } from "../utils/date";
 import DatePickerAndroid from "@react-native-community/datetimepicker";
+import { nanoid } from "@reduxjs/toolkit";
 
 function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
   const [formData, setFormData] = useState(
     selectedExpense
       ? { ...selectedExpense }
-      : { title: "", amount: "", date: getTimestamp(new Date()) }
+      : { id: nanoid(), title: "", amount: "", date: getTimestamp(new Date()) }
   );
   const [open, setOpen] = useState(false);
 
-  const { title, amount, date } = formData;
-  console.log(getFormattedDate(date));
+  const { id, title, amount, date } = formData;
 
   const expenseData = {
+    id: id,
     title: title,
     amount: parseInt(amount),
-    date: date,
+    date: getFormattedDate(date),
   };
   const isAmountValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
   const isDateValid = new Date(date) !== "Invalid Date";

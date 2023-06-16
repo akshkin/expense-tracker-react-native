@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary100,
     alignItems: "center",
-    // backgroundColor: "white",
   },
   buttonsContainer: {
     flexDirection: "row",

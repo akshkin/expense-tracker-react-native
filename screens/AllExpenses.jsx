@@ -9,7 +9,7 @@ import {
 } from "../features/expenseSlice";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorOverlay from "../components/ui/ErrorOverlay";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Wrapper from "../components/Wrapper";
 
 function AllExpenses() {

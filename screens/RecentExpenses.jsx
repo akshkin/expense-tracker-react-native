@@ -26,7 +26,7 @@ function RecentExpenses({ navigation }) {
     const today = new Date();
     const date7daysAgo = getDateMinusDays(today, 7);
     const formattedDate7daysAgo = getFormattedDate(date7daysAgo);
-    return expense.date > formattedDate7daysAgo;
+    return expense?.date > formattedDate7daysAgo;
   });
 
   if (error && !isLoading) return <ErrorOverlay error={error} />;

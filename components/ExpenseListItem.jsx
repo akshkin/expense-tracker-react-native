@@ -7,6 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 function ExpenseListItem({ expense }) {
   const navigation = useNavigation();
 
+  if (!expense) return;
+
   const { id, title, date, amount } = expense;
 
   function handlePress() {

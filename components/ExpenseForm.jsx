@@ -90,7 +90,7 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
           size={24}
           color={GlobalStyles.colors.primary50}
         />
-        <Text style={styles.selectedDate}>{date}</Text>
+        <Text style={styles.selectedDate}>{getFormattedDate(date)}</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <Button style={styles.button} onPress={cancel}>

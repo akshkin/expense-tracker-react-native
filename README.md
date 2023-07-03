@@ -10,6 +10,15 @@ A React Native expense tracker app built using Expo. The app allows users to tra
 - Edit or delete existing expenses.
 - Responsive bottom tabs navigation using React Navigation.
 
+## Screenshots
+<div style="display: flex;">
+  <img src="assets/screenshots/Screenshot_4.png" width="300" height="600">
+  <img src="assets/screenshots/Screenshot_1.png" width="300" height="600">
+  <img src="assets/screenshots/Screenshot_2.png" width="300" height="600">
+  <img src="assets/screenshots/Screenshot_3.png" width="300" height="600">  
+</div>
+
+
 ## Prerequisites
 - Node.js and npm should be installed on your machine.
 - Expo CLI should be installed globally.

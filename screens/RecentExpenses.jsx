@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
-import { Text } from "react-native";
 import ExpensesOutput from "../components/ExpensesOutput";
 import { useDispatch, useSelector } from "react-redux";
 import {
   errorState,
-  fetchExpenses,
+  getExpensesFromStorage,
   loadingState,
   selectExpense,
 } from "../features/expenseSlice";
-import { getDateMinusDays } from "../utils/date";
+import { getDateMinusDays, getFormattedDate } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorOverlay from "../components/ui/ErrorOverlay";
 import Wrapper from "../components/Wrapper";
@@ -20,14 +19,14 @@ function RecentExpenses({ navigation }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchExpenses());
+    dispatch(getExpensesFromStorage());
   }, []);
 
-  const recentExpenses = expenses.filter((expense) => {
+  const recentExpenses = expenses?.filter((expense) => {
     const today = new Date();
     const date7daysAgo = getDateMinusDays(today, 7);
-
-    return expense.date > date7daysAgo;
+    const formattedDate7daysAgo = getFormattedDate(date7daysAgo);
+    return expense.date > formattedDate7daysAgo;
   });
 
   if (error && !isLoading) return <ErrorOverlay error={error} />;

@@ -1,10 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  deleteExpenses,
-  getExpenses,
-  storeExpense,
-  updateExpenses,
-} from "../utils/http";
+import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   loading: false,
@@ -12,66 +7,65 @@ const initialState = {
   error: "",
 };
 
-export const addExpense = createAsyncThunk(
-  "expense/add",
-  async (expenseData) => {
+export const updateExpense = createAsyncThunk(
+  "expense/update",
+  async ({ expenseId, expenseData, expenses }) => {
     try {
-      await storeExpense(expenseData);
+      const newExpenses = expenses?.map((expense) =>
+        expense.id === expenseId ? expenseData : expense
+      );
+      await AsyncStorage.setItem("expenses", JSON.stringify(newExpenses));
     } catch (error) {
       console.log(error);
+      return Promise.reject(error);
+    }
+  }
+);
+export const deleteExpense = createAsyncThunk(
+  "expense/delete",
+  async ({ expenseId, expenses }) => {
+    try {
+      const newExpenses = expenses.filter(
+        (expense) => expense.id !== expenseId
+      );
+      await AsyncStorage.setItem("expenses", JSON.stringify(newExpenses));
+      return newExpenses;
+    } catch (error) {
+      console.log(error.message);
+      return Promise.reject(error);
+    }
+  }
+);
+export const addExpense = createAsyncThunk(
+  "expense/add",
+  async ({ expenseData, expenses }) => {
+    try {
+      const newExpenses = [expenseData, ...expenses];
+      await AsyncStorage.setItem("expenses", JSON.stringify(newExpenses));
+    } catch (error) {
+      console.log(error.message);
       return Promise.reject(error);
     }
   }
 );
 
-export const updateExpense = createAsyncThunk(
-  "expense/update",
-  async ({ expenseId, expenseData }) => {
+export const getExpensesFromStorage = createAsyncThunk(
+  "expense/get",
+  async () => {
     try {
-      const data = await updateExpenses(expenseId, expenseData);
-      return data;
+      const expenses = await AsyncStorage.getItem("expenses");
+      return expenses.length > 0 ? JSON.parse(expenses) : [];
     } catch (error) {
       console.log(error);
       return Promise.reject(error);
     }
   }
 );
-export const deleteExpense = createAsyncThunk("expense/delete", async (id) => {
-  try {
-    await deleteExpenses(id);
-  } catch (error) {
-    console.log(error.message);
-    return Promise.reject(error);
-  }
-});
-export const fetchExpenses = createAsyncThunk("expense/fetch", async () => {
-  try {
-    const data = await getExpenses();
-    let expensesArray = [];
-    for (key in data) {
-      const expenseObject = {
-        id: key,
-        title: data[key].title,
-        amount: data[key].amount,
-        date: data[key].date,
-      };
-      expensesArray.push(expenseObject);
-    }
-    return expensesArray.reverse();
-  } catch (error) {
-    console.log(error);
-    return Promise.reject(error);
-  }
-});
 
 const expenseSlice = createSlice({
   name: "expenses",
   initialState: initialState,
-  reducers: {
-    addExpenseItem(state, action) {
-      state.expenses = [action.payload, ...state.expenses];
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(addExpense.pending, (state, action) => {
@@ -79,6 +73,7 @@ const expenseSlice = createSlice({
       })
       .addCase(addExpense.fulfilled, (state, action) => {
         state.loading = false;
+        state.expenses = action.payload;
       })
       .addCase(addExpense.rejected, (state, action) => {
         state.loading = false;
@@ -102,26 +97,28 @@ const expenseSlice = createSlice({
       })
       .addCase(deleteExpense.fulfilled, (state, action) => {
         state.loading = false;
+        state.expenses = action.payload;
       })
       .addCase(deleteExpense.rejected, (state, action) => {
         state.loading = false;
         state.error = "An error has occurred";
       })
-      .addCase(fetchExpenses.pending, (state, action) => {
+      .addCase(getExpensesFromStorage.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(fetchExpenses.fulfilled, (state, action) => {
+      .addCase(getExpensesFromStorage.fulfilled, (state, action) => {
         state.loading = false;
         state.expenses = action.payload;
       })
-      .addCase(fetchExpenses.rejected, (state, action) => {
+      .addCase(getExpensesFromStorage.rejected, (state, action) => {
         state.loading = false;
         state.error = "Failed to fetch expenses. Try again later";
       });
   },
 });
 
-export const addExpenseItem = expenseSlice.actions.addExpenseItem;
+export const { addExpenseItem, updateExpenseItem, deleteExpenseItem } =
+  expenseSlice.actions;
 export const selectExpense = (state) => state.expenses.expenses;
 export const loadingState = (state) => state.expenses.loading;
 export const errorState = (state) => state.expenses.error;

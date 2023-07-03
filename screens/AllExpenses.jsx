@@ -3,13 +3,12 @@ import ExpensesOutput from "../components/ExpensesOutput";
 import { useDispatch, useSelector } from "react-redux";
 import {
   errorState,
-  fetchExpenses,
+  getExpensesFromStorage,
   loadingState,
   selectExpense,
 } from "../features/expenseSlice";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorOverlay from "../components/ui/ErrorOverlay";
-import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View } from "react-native";
 import Wrapper from "../components/Wrapper";
 
@@ -20,7 +19,7 @@ function AllExpenses() {
   const error = useSelector(errorState);
 
   useEffect(() => {
-    dispatch(fetchExpenses());
+    dispatch(getExpensesFromStorage());
   }, []);
 
   if (error && !isLoading) return <ErrorOverlay error={error} />;

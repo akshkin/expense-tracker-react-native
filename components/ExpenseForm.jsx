@@ -5,22 +5,25 @@ import { useState } from "react";
 import Button from "./ui/Button";
 import { getFormattedDate, getTimestamp } from "../utils/date";
 import DatePickerAndroid from "@react-native-community/datetimepicker";
+import { nanoid } from "@reduxjs/toolkit";
+import { GlobalStyles } from "../constants/styles";
+import { Ionicons } from "@expo/vector-icons";
 
 function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
   const [formData, setFormData] = useState(
     selectedExpense
       ? { ...selectedExpense }
-      : { title: "", amount: "", date: getTimestamp(new Date()) }
+      : { id: nanoid(), title: "", amount: "", date: getTimestamp(new Date()) }
   );
   const [open, setOpen] = useState(false);
 
-  const { title, amount, date } = formData;
-  console.log(getFormattedDate(date));
+  const { id, title, amount, date } = formData;
 
   const expenseData = {
+    id: id,
     title: title,
     amount: parseInt(amount),
-    date: date,
+    date: getFormattedDate(date),
   };
   const isAmountValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
   const isDateValid = new Date(date) !== "Invalid Date";
@@ -45,7 +48,7 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.text}>{isEditing ? "Edit" : "New"} expense</Text>
       <Input
         label="Title"
@@ -81,6 +84,14 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
           }}
         />
       )}
+      <View style={styles.selectedDateContainer}>
+        <Ionicons
+          name="calendar"
+          size={24}
+          color={GlobalStyles.colors.primary50}
+        />
+        <Text style={styles.selectedDate}>{date}</Text>
+      </View>
       <View style={styles.buttonsContainer}>
         <Button style={styles.button} onPress={cancel}>
           Cancel
@@ -96,6 +107,10 @@ function ExpenseForm({ handleConfirm, cancel, isEditing, selectedExpense }) {
 export default ExpenseForm;
 
 const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    marginHorizontal: "auto",
+  },
   text: {
     color: "white",
     fontSize: 24,
@@ -109,5 +124,16 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "50%",
+  },
+  selectedDateContainer: {
+    padding: 4,
+    borderRadius: 4,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 4,
+  },
+  selectedDate: {
+    color: GlobalStyles.colors.primary50,
   },
 });

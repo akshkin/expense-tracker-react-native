@@ -56,7 +56,7 @@ export const getExpensesFromStorage = createAsyncThunk(
   async () => {
     try {
       const expenses = await AsyncStorage.getItem("expenses");
-      return expenses.length > 0 ? JSON.parse(expenses) : [];
+      return expenses && expenses.length > 0 ? JSON.parse(expenses) : [];
     } catch (error) {
       console.log(error);
       return Promise.reject(error);

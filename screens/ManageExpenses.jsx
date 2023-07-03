@@ -16,7 +16,6 @@ import ExpenseForm from "../components/ExpenseForm";
 import { getFormattedDate } from "../utils/date";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import ErrorText from "../components/ErrorText";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function ManageExpenses({ route, navigation }) {
   const expenses = useSelector(selectExpense);
@@ -27,7 +26,9 @@ function ManageExpenses({ route, navigation }) {
   const expenseId = route.params?.expenseId;
   const isEditing = !!expenseId; //to turn a value into a boolean --> falsy value to false and truthy value to true
 
-  const selectedExpense = expenses?.find((expense) => expense.id === expenseId);
+  const selectedExpense = expenses?.find(
+    (expense) => expense?.id === expenseId
+  );
   const formattedSelectedExpense = selectedExpense && {
     ...selectedExpense,
     amount: selectedExpense?.amount?.toString(),

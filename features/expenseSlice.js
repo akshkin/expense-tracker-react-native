@@ -15,6 +15,7 @@ export const updateExpense = createAsyncThunk(
         expense.id === expenseId ? expenseData : expense
       );
       await AsyncStorage.setItem("expenses", JSON.stringify(newExpenses));
+      return newExpenses;
     } catch (error) {
       console.log(error);
       return Promise.reject(error);
@@ -42,6 +43,7 @@ export const addExpense = createAsyncThunk(
     try {
       const newExpenses = [expenseData, ...expenses];
       await AsyncStorage.setItem("expenses", JSON.stringify(newExpenses));
+      return newExpenses;
     } catch (error) {
       console.log(error.message);
       return Promise.reject(error);

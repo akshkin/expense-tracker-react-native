@@ -11,15 +11,6 @@ import { Ionicons } from "@expo/vector-icons";
 import IconButton from "./components/ui/IconButton";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import * as Notifications from "expo-notifications";
-
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldPlaySound: true,
-//     shouldSetBadge: false,
-//     shouldShowAlert: true,
-//   }),
-// });
 
 const Stack = createStackNavigator();
 const BottomTabs = createBottomTabNavigator();

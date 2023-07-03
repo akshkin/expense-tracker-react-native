@@ -54,7 +54,6 @@ function ManageExpenses({ route, navigation }) {
     if (isEditing) {
       dispatch(updateExpense({ expenseId, expenseData, expenses }));
     } else {
-      console.log("adding");
       dispatch(addExpense({ expenseData, expenses }));
     }
     navigation.goBack();

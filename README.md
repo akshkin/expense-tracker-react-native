@@ -44,9 +44,9 @@ A React Native expense tracker app built using Expo. The app allows users to tra
 The app utilizes AsyncStorage to store expenses locally on the device. This allows for persistent storage of expenses even when the app is closed or restarted. AsyncStorage is a simple key-value storage system provided by React Native.
   
 ## Dependencies
-- React Native: 0.71.8
-- Expo: 48.0.18
-- React Navigation: 6.0.2
-- @react-native-community/datetimepicker: 6.7.3
-- @react-native-async-storage/async-storage: 1.17.11
+- React Native: 0.73.2
+- Expo: 50.0.2
+- React Navigation: 6.1.6
+- @react-native-community/datetimepicker: 7.6.1
+- @react-native-async-storage/async-storage: 1.21.0
 - @reduxjs/toolkit": "^1.9.5"
